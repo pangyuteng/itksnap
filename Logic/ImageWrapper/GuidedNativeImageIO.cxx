@@ -91,6 +91,7 @@ GuidedNativeImageIO
   {"DICOM Image Series", "",         false, true,  true,  true},
   {"DICOM Single Image", "dcm",      false, true,  true,  true},
   {"Echo Cartesian DICOM", "dcm",    false, true,  true,  true},
+  {"Plain Text List", "list",        false, false, true,  true},
   {"GE Version 4", "ge4",            false, false, true,  true},
   {"GE Version 5", "ge5",            false, false, true,  true},
   {"GIPL", "gipl,gipl.gz",           true,  false, true,  true},
@@ -404,6 +405,7 @@ GuidedNativeImageIO
     case FORMAT_SIEMENS:    m_IOBase = itk::SiemensVisionImageIO::New(); break;
     case FORMAT_VTK:        m_IOBase = itk::VTKImageIO::New();           break;
     case FORMAT_VOXBO_CUB:  m_IOBase = itk::VoxBoCUBImageIO::New();      break;
+    case FORMAT_DICOM_LIST:
     case FORMAT_DICOM_DIR:
     case FORMAT_ECHO_CARTESIAN_DICOM:
     case FORMAT_DICOM_FILE: m_IOBase = itk::GDCMImageIO::New();          break;
@@ -711,8 +713,15 @@ GuidedNativeImageIO
   typedef itk::VectorImage<TScalar, 4> NativeImageType;
 
   // There is a special handler for the DICOM case!
-  if(m_FileFormat == FORMAT_DICOM_DIR && m_DICOMFiles.size() > 1)
+  if(m_FileFormat == FORMAT_DICOM_DIR && m_DICOMFiles.size() > 1) || (m_FileFormat == FORMAT_DICOM_LIST)
     {
+
+    if (m_FileFormat == FORMAT_DICOM_LIST)
+      {
+      //TODO: read file content from FileName and populate m_DICOMFiles
+
+      }
+
     // TODO: how to handle this with 4D - I have no earthly idea
 
     // It seems that ITK can't yet read DICOM into a VectorImage. 
