@@ -384,12 +384,19 @@ void
 GuidedNativeImageIO
 ::CreateImageIO(const char *fname, Registry &folder, bool flag_read)
 {
+
+  std::cout << "filename:" << fname << " folder:" << folder << std::endl << std::flush;
+
   // Get the format specified in the folder
   m_FileFormat = GetFileFormat(folder);
 
   // Is the DICOM single image an Echo Cartesian DICOM image?
   if (m_FileFormat == FORMAT_DICOM_FILE || m_FileFormat == FORMAT_COUNT)
     m_FileFormat = GuessFormatForFileName(fname, true);
+
+  // Is folder path a directory?
+  if (m_FileFormat == FORMAT_COUNT && itksys::SystemTools::FileIsDirectory(fname))
+    m_FileFormat = FORMAT_DICOM_DIR;
 
   // Choose the approach based on the file format
   switch(m_FileFormat)
